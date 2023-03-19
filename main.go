@@ -49,6 +49,7 @@ type Rule struct {
 	Name             string   `yaml:"name"`
 	Pattern          string   `yaml:"pattern"`
 	WorkingDirectory string   `yaml:"workingDir"`
+	Environment      []string `yaml:"env"`
 	Command          []string `yaml:"command"`
 }
 
@@ -185,8 +186,10 @@ func main() {
 				if matchedRule.WorkingDirectory != "" {
 					cmd.Dir = matchedRule.WorkingDirectory
 				}
-				cmd.Env = os.Environ()
-				cmd.Env = append(cmd.Env, envsFromUpdate(update)...)
+				env := os.Environ()
+				env = append(env, cmd.Env...)
+				env = append(env, envsFromUpdate(update)...)
+				cmd.Env = env
 
 				var reply string
 				if out, err := cmd.Output(); err != nil {
