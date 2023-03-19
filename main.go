@@ -46,9 +46,10 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 }
 
 type Rule struct {
-	Name    string   `yaml:"name"`
-	Pattern string   `yaml:"pattern"`
-	Command []string `yaml:"command"`
+	Name             string   `yaml:"name"`
+	Pattern          string   `yaml:"pattern"`
+	WorkingDirectory string   `yaml:"workingDir"`
+	Command          []string `yaml:"command"`
 }
 
 func (r Rule) Validate() error {
@@ -181,6 +182,9 @@ func main() {
 				log.Debug().Str("command", exe).Strs("args", cmdArgs).Msg("running command")
 
 				cmd := exec.CommandContext(cmdContext, exe, cmdArgs...)
+				if matchedRule.WorkingDirectory != "" {
+					cmd.Dir = matchedRule.WorkingDirectory
+				}
 				cmd.Env = append(cmd.Env, envsFromUpdate(update)...)
 
 				var reply string

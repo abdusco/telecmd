@@ -23,6 +23,7 @@ commandTimeout: 1s  # Anything parseable by time.ParseDuration
 rules:
   - name: echo
     pattern: "/start"  # Regex to match incoming messages
+    # workingDir: /Users/abdus/dev/ideas/payton
     command:  # Command to execute. Message text will be passed as commandline argument.
       - python3
       - -c
