@@ -185,6 +185,7 @@ func main() {
 				if matchedRule.WorkingDirectory != "" {
 					cmd.Dir = matchedRule.WorkingDirectory
 				}
+				cmd.Env = os.Environ()
 				cmd.Env = append(cmd.Env, envsFromUpdate(update)...)
 
 				var reply string
