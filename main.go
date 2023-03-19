@@ -187,7 +187,7 @@ func main() {
 					cmd.Dir = matchedRule.WorkingDirectory
 				}
 				env := os.Environ()
-				env = append(env, cmd.Env...)
+				env = append(env, matchedRule.Environment...)
 				env = append(env, envsFromUpdate(update)...)
 				cmd.Env = env
 
