@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -14,12 +15,12 @@ import (
 	"time"
 
 	"github.com/alecthomas/kong"
-	"github.com/ghodss/yaml"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/sourcegraph/conc/pool"
 	"golang.org/x/exp/slices"
+	"gopkg.in/yaml.v3"
 
 	"github.com/abdusco/telecmd/version"
 )
@@ -49,6 +50,7 @@ type Rule struct {
 	Name             string   `yaml:"name"`
 	Pattern          string   `yaml:"pattern"`
 	WorkingDirectory string   `yaml:"workingDir"`
+	UseStdin         bool     `yaml:"useStdin"`
 	Environment      []string `yaml:"env"`
 	Command          []string `yaml:"command"`
 }
@@ -175,8 +177,13 @@ func main() {
 				cmdContext, cancel := context.WithTimeout(ctx, timeout)
 				defer cancel()
 
+				var stdin io.Reader
 				args := slices.Clone(matchedRule.Command)
-				args = append(args, "--", update.Message.Text)
+				if matchedRule.UseStdin {
+					args = append(args, "--", update.Message.Text)
+				} else {
+					stdin = strings.NewReader(update.Message.Text)
+				}
 
 				exe := args[0]
 				cmdArgs := args[1:]
@@ -186,6 +193,7 @@ func main() {
 				if matchedRule.WorkingDirectory != "" {
 					cmd.Dir = matchedRule.WorkingDirectory
 				}
+				cmd.Stdin = stdin
 				env := os.Environ()
 				env = append(env, matchedRule.Environment...)
 				env = append(env, envsFromUpdate(update)...)

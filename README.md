@@ -23,17 +23,22 @@ commandTimeout: 1s  # Anything parseable by time.ParseDuration
 rules:
   - name: echo
     pattern: "/start"  # Regex to match incoming messages
-    # workingDir: /Users/abdus/dev/ideas/payton
+    workingDir: /path/to/cwd
+    # useStdin: true  # Pass message text in stdin 
+    env:
+      - PYTHONIOENCODING=utf-8
+      - PYTHONLEGACYWINDOWSSTDIO=utf-8
+      - PYTHONUTF8=1
     command:  # Command to execute. Message text will be passed as commandline argument.
       - python3
       - -c
       - |-
         import sys
-        import time
-        print(sys.argv)
-        text = sys.argv[2]
-        time.sleep(3)
-        print(f'received {text}')
+        import os
+        
+        print(os.argv)
+        for k in sorted(os.environ):
+          print(f'{k}={os.environ[k]}')
 ```
 
 ## TODO

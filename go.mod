@@ -4,11 +4,11 @@ go 1.19
 
 require (
 	github.com/alecthomas/kong v0.7.1
-	github.com/ghodss/yaml v1.0.0
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/rs/zerolog v1.29.0
 	github.com/sourcegraph/conc v0.2.0
 	golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -25,5 +25,4 @@ require (
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/sourcegraph/sourcegraph/lib v0.0.0-20221216004406-749998a2ac74 // indirect
 	golang.org/x/sys v0.4.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
