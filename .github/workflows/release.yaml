@@ -21,6 +21,7 @@ jobs:
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
           binary_name: "telecmd"
+          project_path: "./cmd/telecmd"
           asset_name: telecmd-${{ matrix.goos }}-${{ matrix.goarch }}
           pre_command: export CGO_ENABLED=0
           extra_files: LICENSE.txt README.md
