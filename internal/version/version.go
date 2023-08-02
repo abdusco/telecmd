@@ -5,20 +5,17 @@ import (
 	"runtime/debug"
 )
 
-var Commit string
-var CommitTime string
-
-type VersionInfo struct {
+type Version struct {
 	Commit     string
 	CommitTime string
 }
 
-func (v VersionInfo) String() string {
+func (v Version) String() string {
 	return fmt.Sprintf("%s.%s", v.CommitTime, v.Commit)
 }
 
-func GitVersion() VersionInfo {
-	var info VersionInfo
+func GitVersion() Version {
+	var info Version
 	if build, ok := debug.ReadBuildInfo(); ok {
 		for _, setting := range build.Settings {
 			switch setting.Key {
